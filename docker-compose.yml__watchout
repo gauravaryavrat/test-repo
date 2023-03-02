@@ -1,0 +1,62 @@
+version: '3'
+services:
+ client:
+  image: client:v0
+  ports:
+    - 80:80
+    - 443:443
+  restart: always
+  networks:
+    - watchout_net
+    - activemq_network
+
+ server:
+  image: server:v1
+  ports:
+    - 4000:4000
+  restart: always
+  networks:
+    - watchout_net
+    - activemq_network
+
+ mongodb:
+  image: mongo:5.0.14
+  ports:
+    - 27017:27017
+  volumes:
+      # named volumes
+    - mongodatabase:/data/db
+  restart: always
+  networks:
+    - watchout_net
+
+ activemq:
+  image: gauravsingharya/activemq:bro2
+  ports:
+    - 61613:61613
+    - 61614:61614
+    - 1883:1883
+  restart: always
+  networks:
+    - activemq_network
+
+ traccar:
+  image: traccar:v1
+  ports:
+    - 8082:8082
+  volumes:
+    - traccar-db:/opt/traccar/data/database
+  restart: always
+  networks:
+    - watchout_net
+
+volumes:
+ mongodatabase:
+ traccar-db:
+
+networks:
+ activemq_network:
+    driver: bridge
+ watchout_net:
+
+
