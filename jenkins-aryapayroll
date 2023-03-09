@@ -1,0 +1,39 @@
+pipeline {
+agent any
+
+    stages {
+         stage('gitclone') {
+             steps {
+                 git 'https://github.com/gauravaryavrat/jenkins_aryapayroll.git'
+                }
+            }
+            
+            stage('build dockerfile') {
+                steps{
+
+                    sh 'cd /var/lib/jenkins/workspace/aryapayroll/client && docker build -t gauravsingharya/aryapayroll-client:new . '
+                    sh 'cd /var/lib/jenkins/workspace/aryapayroll/server && docker build -t gauravsingharya/aryapayroll-server:new . '
+                    
+                }
+            }
+            stage('push image'){
+            steps {
+            sh 'docker login -u="gauravsingharya" -p="dockerpsd@1810"'
+            sh 'docker push gauravsingharya/aryapayroll-client:new '
+            sh 'docker push gauravsingharya/aryapayroll-server:new '
+            }
+            
+        }
+            
+          stage('pull in remote server') {
+            steps {
+         sshagent(credentials: ['ubuntu-aws'], ignoreMissing: true) {
+                sh 'ssh ubuntu@13.39.109.190 -o StrictHostKeyChecking=no sudo apt update'
+                 sh 'scp docker-compose.yml ubuntu@13.39.109.190:/home/ubuntu/'
+                 // sh 'ssh user@192.168.1.158 docker pull gauravsingharya/aryapayroll-server:new '
+                 // sh 'ssh user@192.168.1.158 docker pull gauravsingharya/aryapayroll-client:new '
+           }
+              }
+                }   
+          }
+    }
