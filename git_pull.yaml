@@ -1,0 +1,12 @@
+---
+- name: Git Pull Playbook
+  hosts: centos7
+  become: true
+  tasks:
+    - name: Update Git Repo
+      git:
+        repo: https://github.com/gauravaryavrat/jenkins_aryapayroll.git
+        dest: /home/centos/
+        version: master
+        clone: yes
+        update: no
