@@ -1,0 +1,34 @@
+METHOD 2
+
+Solution For Everyone Without Recovery Installed – ADB:
+
+What You Need:
+=>A computer running a Linux distro or Windows+Cygwin
+=>USB cable to connect your phone to the PC
+=>Adb installed
+
+How to install adb:
+1. Open Terminal
+2. Type:
+
+“sudo apt-get install android-tools-adb”
+-> Hit [Enter]
+
+3. Follow the instructions until everything is installed.
+
+INSTRUCTIONS:
+
+1. Connect you (turned on) Phone to the Computer via USB.
+2. Open a terminal window.
+3. Type:
+
+adb devices
+adb shell
+cd data/system
+su
+rm *.key
+
+4. Done.. Now You Just Have To Reboot.
+
+Note: If You See The Gesture Pattern Grid Or Password After Restarting, Don’t Worry.
+Just Try Any Random Pattern Or Password And it Should Unlock.
